@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    $.fn.carousel = function(time = "fast")
+    $.fn.cARousel = function(time = "fast")
     {
         $(this).addClass("carousel");
         
@@ -93,6 +93,4 @@ $(document).ready(function()
             }
         });
     }
-
-    $(".event-carousel").carousel();
 });
