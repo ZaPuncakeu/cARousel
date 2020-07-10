@@ -4,7 +4,7 @@ $(document).ready(function()
     {
         $(this).addClass("carousel");
         
-        let elem_size = $(".carousel .c-item").length;
+        let elem_size = $(this).find(".c-item").length;
         let curr_elem = 1;
         let carousel_changing = false; 
 
@@ -18,14 +18,14 @@ $(document).ready(function()
 
         for(let i = 1; i <= elem_size; i++)
         {
-            $(".carousel > .c-item:nth-child(1)").clone().appendTo(".carousel-content");
-            $(".carousel-indicators").append("<button class='c-ind'></button>")
-            $(".carousel > .c-item:nth-child(1)").remove();
+            $(this).children(".c-item").eq(i-1).clone().appendTo(".carousel-content");
+            $(this).find(".carousel-indicators").append("<button class='c-ind'></button>")
+             $(this).children(".c-item").eq(0).remove();
         }
 
         for(let i = 2; i <= elem_size; i++)
         {
-            $(".event-carousel .c-item:nth-child("+i+")").hide();
+            $(this).find(".c-item:nth-child("+i+")").hide();
         }
 
         $(".c-arrow-left").on("click", function()
@@ -33,8 +33,8 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-                $(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                $(this).find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
+                $(this).find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     if(curr_elem <= 1)
                     {
@@ -44,8 +44,8 @@ $(document).ready(function()
                     {
                         curr_elem--;
                     }
-                    $(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
+                    $(this).find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
@@ -56,7 +56,7 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
+                $(this).find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
                 $(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     if(curr_elem >= elem_size)
@@ -67,8 +67,8 @@ $(document).ready(function()
                     {
                         curr_elem++;
                     }
-                    $(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
+                    $(this).find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
@@ -86,8 +86,8 @@ $(document).ready(function()
                 $(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     curr_elem = parseInt(index+1);
-                    $(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
+                    $(this).find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
