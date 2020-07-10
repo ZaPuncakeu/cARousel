@@ -57,7 +57,7 @@ $(document).ready(function()
             {
                 carousel_changing = true;
                 $(this).find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-                $(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                $(this).find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     if(curr_elem >= elem_size)
                     {
@@ -83,7 +83,7 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                $(this).find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     curr_elem = parseInt(index+1);
                     $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
