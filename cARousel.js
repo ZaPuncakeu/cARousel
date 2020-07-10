@@ -3,6 +3,7 @@ $(document).ready(function()
     $.fn.cARousel = function(time = "fast")
     {
         $(this).addClass("carousel");
+        $cAR = $(this);
         
         let elem_size = $(this).find(".c-item").length;
         let curr_elem = 1;
@@ -20,7 +21,7 @@ $(document).ready(function()
         {
             $(this).children(".c-item").eq(i-1).clone().appendTo(".carousel-content");
             $(this).find(".carousel-indicators").append("<button class='c-ind'></button>")
-             $(this).children(".c-item").eq(0).remove();
+            $(this).children(".c-item").eq(0).remove();
         }
 
         for(let i = 2; i <= elem_size; i++)
@@ -33,8 +34,8 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $(this).find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-                $(this).find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                $cAR.find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
+                $cAR.find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     if(curr_elem <= 1)
                     {
@@ -44,8 +45,8 @@ $(document).ready(function()
                     {
                         curr_elem--;
                     }
-                    $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $(this).find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $cAR.find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
+                    $cAR.find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
@@ -56,8 +57,8 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $(this).find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-                $(this).find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                $cAR.find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
+                $cAR.find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     if(curr_elem >= elem_size)
                     {
@@ -67,8 +68,8 @@ $(document).ready(function()
                     {
                         curr_elem++;
                     }
-                    $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $(this).find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $cAR.find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
+                    $cAR.find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
@@ -83,11 +84,11 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $(this).find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                $cAR.find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
                 {
                     curr_elem = parseInt(index+1);
-                    $(this).find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $(this).find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $cAR.find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
+                    $cAR.find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
