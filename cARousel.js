@@ -19,9 +19,9 @@ $(document).ready(function()
 
         for(let i = 1; i <= elem_size; i++)
         {
-            $(this).children(".c-item").eq(i-1).clone().appendTo(".carousel-content");
-            $(this).find(".carousel-indicators").append("<button class='c-ind'></button>")
-            $(this).children(".c-item").eq(0).remove();
+            $cAR.children(".carousel-content").find(".c-item:nth-child(1)").clone().appendTo(".carousel-content");
+            $cAR.children(".carousel-indicators").append("<button class='c-ind'></button>")
+            $cAR.children(".carousel-content").find(".c-item:nth-child(1)").remove();
         }
 
         for(let i = 2; i <= elem_size; i++)
