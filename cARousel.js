@@ -1,55 +1,49 @@
+let carousels = [];
+
 $(document).ready(function()
 {
-    $.fn.cARousel = function(time = "fast")
+    $.fn.cARousel = function(speed = "fast")
     {
-        $(this).addClass("carousel");
-        $cAR = $(this);
-        
-        let elem_size = $(this).find(".c-item").length;
-        let curr_elem = 1;
-        let carousel_changing = false; 
+        let informations = {
+            speed: speed,
+            loading: false,
+            n_elems: $(this).children().length,
+            curr_elem: 0
+        };
 
-        $(this).append('<div class="carousel-content"></div>');
-        $(this).append('<div class="carousel-indicators"></div>');
-        $(this).append('<div class="carousel-arrows">'+
-                        '<button class="c-arrow-left fa fa-angle-left"></button>'+
-                        '<button class="c-arrow-right fa fa-angle-right"></button>'+
+        carousels.push(informations);
+
+        $cAR = $(this);
+        let elements = $cAR.children();
+
+        $cAR.append('<div class="carousel-content"></div>');
+        $cAR.append('<div class="carousel-indicators"></div>');
+        $cAR.append('<div class="carousel-arrows">'+
+                        '<button onclick="prevElem(this,'+(carousels.length-1)+')" class="c-arrow-left fa fa-angle-left"></button>'+
+                        '<button onclick="nextElem(this,'+(carousels.length-1)+')" class="c-arrow-right fa fa-angle-right"></button>'+
                         '</div>'
         );
 
-        for(let i = 1; i <= elem_size; i++)
+        for(let i = 0; i < elements.length; i++)
         {
-            $cAR.children(".carousel-content").find(".c-item:nth-child(1)").clone().appendTo(".carousel-content");
-            $cAR.children(".carousel-indicators").append("<button class='c-ind'></button>")
-            $cAR.children(".carousel-content").find(".c-item:nth-child(1)").remove();
+            $cAR.children(".carousel-content").append(elements[i]);
+            $cAR.children(".carousel-indicators").append('<button onclick="goToElem(this,'+(carousels.length-1)+')" class="c-ind"></button>');
+            if(i > 0)
+            {
+                $cAR.children(".carousel-content").find(".c-item").eq(i).hide();
+            }
         }
 
-        for(let i = 2; i <= elem_size; i++)
-        {
-            $(this).find(".c-item:nth-child("+i+")").hide();
-        }
+        $cAR.children(".carousel-indicators").find(".c-ind").eq(0).addClass("c-ind-selected");
+        
+    }
 
+    
+
+        
         $(".c-arrow-left").on("click", function()
         {
-            if(!carousel_changing)
-            {
-                carousel_changing = true;
-                $cAR.find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-                $cAR.find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
-                {
-                    if(curr_elem <= 1)
-                    {
-                        curr_elem = elem_size;
-                    }
-                    else 
-                    {
-                        curr_elem--;
-                    }
-                    $cAR.find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $cAR.find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
-                    carousel_changing = false;
-                });
-            }
+            
         });
 
         $(".c-arrow-right").on("click", function()
@@ -57,41 +51,98 @@ $(document).ready(function()
             if(!carousel_changing)
             {
                 carousel_changing = true;
-                $cAR.find(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-                $cAR.find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
+                let index = $(this).parent().parent().find(".c-ind-selected").index();
+                let size = $(this).parent().parent().children(".carousel-content").children().length;
+                $(this).parent().parent().find(".c-ind-selected").removeClass("c-ind-selected");
+                $(this).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeOut(time, function()
                 {
-                    if(curr_elem >= elem_size)
+                    if(index >= size-1)
                     {
-                        curr_elem = 1;
+                        index = 0;
                     }
                     else 
                     {
-                        curr_elem++;
+                        index++;
                     }
-                    $cAR.find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $cAR.find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
+                    $(this).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeIn(time);
+                    $(this).parent().parent().children(".carousel-indicators").find(".c-ind").eq(index).addClass("c-ind-selected");
                     carousel_changing = false;
                 });
             }
         });
-
-        $(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
 
         $(".c-ind").on("click", function()
         {
-            $(".c-ind:nth-child("+curr_elem+")").removeClass("c-ind-selected");
-            let index = $(this).index();
-            if(!carousel_changing)
+            
+        });
+});
+
+
+function prevElem(elem,infos_index)
+{
+    if(!carousels[infos_index].loading)
+    {
+        carousels[infos_index].loading = true;
+        let index = $(elem).parent().parent().find(".c-ind-selected").index();
+        let size = carousels[infos_index].n_elems;
+        $(elem).parent().parent().find(".c-ind-selected").removeClass("c-ind-selected");
+        $(elem).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeOut(carousels[infos_index].speed, function()
+        {
+            if(index <= 0)
             {
-                carousel_changing = true;
-                $cAR.find(".c-item:nth-child("+curr_elem+")").fadeOut(time, function()
-                {
-                    curr_elem = parseInt(index+1);
-                    $cAR.find(".c-item:nth-child("+curr_elem+")").fadeIn(time);
-                    $cAR.find(".c-ind:nth-child("+curr_elem+")").addClass("c-ind-selected");
-                    carousel_changing = false;
-                });
+                index = size-1;
             }
+            else 
+            {
+                index--;
+            }
+            $(elem).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeIn(carousels[infos_index].speed);
+            $(elem).parent().parent().children(".carousel-indicators").find(".c-ind").eq(index).addClass("c-ind-selected");
+            carousels[infos_index].loading = false;
         });
     }
-});
+}
+
+function nextElem(elem,infos_index)
+{
+    if(!carousels[infos_index].loading)
+    {
+        carousels[infos_index].loading = true;
+        let index = $(elem).parent().parent().find(".c-ind-selected").index();
+        let size = carousels[infos_index].n_elems;
+        $(elem).parent().parent().find(".c-ind-selected").removeClass("c-ind-selected");
+        $(elem).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeOut(carousels[infos_index].speed, function()
+        {
+            if(index >= size-1)
+            {
+                index = 0;
+            }
+            else 
+            {
+                index++;
+            }
+            $(elem).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeIn(carousels[infos_index].speed);
+            $(elem).parent().parent().children(".carousel-indicators").find(".c-ind").eq(index).addClass("c-ind-selected");
+            carousels[infos_index].loading = false;
+        });
+    }
+}
+
+function goToElem(elem, infos_index)
+{
+
+    let base_index = $(elem).parent().find(".c-ind-selected").index();    
+    $(elem).parent().find(".c-ind-selected").removeClass("c-ind-selected");
+    let index = $(elem).index();
+
+    if(!carousels[infos_index].loading)
+    {
+        carousels[infos_index].loading = true;
+        $(elem).parent().parent().children(".carousel-content").find(".c-item").eq(base_index).fadeOut(carousels[infos_index].speed, function()
+        {
+            $(elem).parent().parent().children(".carousel-content").find(".c-item").eq(index).fadeIn(carousels[infos_index].speed);
+            $(elem).addClass("c-ind-selected");
+            carousels[infos_index].loading = false;
+        });
+    }
+}
